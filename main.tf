@@ -11,10 +11,18 @@ resource "aws_instance" "instance" {
   security_groups = [aws_security_group.instance.id]
   subnet_id       = each.value.id
   key_name        = var.key_name
+
+  ebs_block_device {
+    device_name = local.block_device_name
+    volume_size = 2
+  }
+
   tags = {
     Name = "instance-${each.value.id}"
   }
 }
+
+
 
 resource "aws_efs_file_system" "fs" {
   tags = {

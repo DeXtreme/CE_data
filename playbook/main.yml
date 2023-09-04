@@ -24,4 +24,25 @@
         path: ~/efs/{{ file_name }}
         state: touch
         mode: "755"
+    
+    - name : Format block device
+      command:
+        cmd: mkfs -t xfs /dev/xvdf
+    
+    - name : Create mount folder
+      file:
+        path: ~/blk
+        state: directory
+        mode: "0755"
+
+    - name : Mount block device
+      command:
+        cmd: mount -t xfs /dev/xvdf ~/blk
+    
+    - name : Create test files
+      file:
+        path: ~/blk/{{ file_name }}
+        state: touch
+        mode: "755"
+    
       
