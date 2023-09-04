@@ -1,0 +1,27 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+    - name : Install amazon-efs-utils
+      yum:
+        name: amazon-efs-utils
+        state: latest
+        update_cache: true
+
+    - name : Create mount folder
+      file:
+        path: ~/efs
+        state: directory
+        mode: "0755"
+      
+    - name : Mount NFS filesystem
+      command:
+        cmd: mount -t efs {{ mount_target }} ~/efs
+    
+    - name : Create test files
+      file:
+        path: ~/efs/{{ file_name }}
+        state: touch
+        mode: "755"
+      
